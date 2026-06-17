@@ -1,0 +1,73 @@
+GRUPOS = {
+    "A": ["EUA", "Panamá", "Uruguai", "Bélgica"],
+    "B": ["México", "Honduras", "Polônia", "Egito"],
+    "C": ["Canadá", "El Salvador", "Japão", "Marrocos"],
+    "D": ["Espanha", "Croácia", "Coreia do Sul", "Camarões"],
+    "E": ["Inglaterra", "Eslováquia", "Colômbia", "Senegal"],
+    "F": ["França", "Ucrânia", "Austrália", "Nigéria"],
+    "G": ["Brasil", "Paraguai", "Suíça", "Costa do Marfim"],
+    "H": ["Argentina", "Bolívia", "República Tcheca", "África do Sul"],
+    "I": ["Portugal", "Romênia", "Arábia Saudita", "Gana"],
+    "J": ["Alemanha", "Sérvia", "Iraque", "Equador"],
+    "K": ["Países Baixos", "Hungria", "Irã", "Tunísia"],
+    "L": ["Itália", "Albânia", "Jordânia", "Chile"],
+}
+
+CODIGOS = {
+    "EUA": "us",
+    "Panamá": "pa",
+    "Uruguai": "uy",
+    "Bélgica": "be",
+    "México": "mx",
+    "Honduras": "hn",
+    "Polônia": "pl",
+    "Egito": "eg",
+    "Canadá": "ca",
+    "El Salvador": "sv",
+    "Japão": "jp",
+    "Marrocos": "ma",
+    "Espanha": "es",
+    "Croácia": "hr",
+    "Coreia do Sul": "kr",
+    "Camarões": "cm",
+    "Inglaterra": "gb-eng",
+    "Eslováquia": "sk",
+    "Colômbia": "co",
+    "Senegal": "sn",
+    "França": "fr",
+    "Ucrânia": "ua",
+    "Austrália": "au",
+    "Nigéria": "ng",
+    "Brasil": "br",
+    "Paraguai": "py",
+    "Suíça": "ch",
+    "Costa do Marfim": "ci",
+    "Argentina": "ar",
+    "Bolívia": "bo",
+    "República Tcheca": "cz",
+    "África do Sul": "za",
+    "Portugal": "pt",
+    "Romênia": "ro",
+    "Arábia Saudita": "sa",
+    "Gana": "gh",
+    "Alemanha": "de",
+    "Sérvia": "rs",
+    "Iraque": "iq",
+    "Equador": "ec",
+    "Países Baixos": "nl",
+    "Hungria": "hu",
+    "Irã": "ir",
+    "Tunísia": "tn",
+    "Itália": "it",
+    "Albânia": "al",
+    "Jordânia": "jo",
+    "Chile": "cl",
+}
+
+
+def flag_img(time: str, width: int = 24) -> str:
+    codigo = CODIGOS.get(time, "un")
+    return (
+        f'<img src="https://flagcdn.com/w40/{codigo}.png" '
+        f'width="{width}" style="vertical-align:middle; margin-right:4px;">'
+    )

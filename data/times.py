@@ -1,0 +1,133 @@
+GRUPOS = {
+    "A": ["México", "África do Sul", "Coreia do Sul", "República Tcheca"],
+    "B": ["Canadá", "Bósnia-Herzegovina", "Catar", "Suíça"],
+    "C": ["Brasil", "Marrocos", "Haiti", "Escócia"],
+    "D": ["EUA", "Paraguai", "Austrália", "Turquia"],
+    "E": ["Alemanha", "Curaçao", "Costa do Marfim", "Equador"],
+    "F": ["Países Baixos", "Japão", "Suécia", "Tunísia"],
+    "G": ["Bélgica", "Egito", "Irã", "Nova Zelândia"],
+    "H": ["Espanha", "Cabo Verde", "Arábia Saudita", "Uruguai"],
+    "I": ["França", "Senegal", "Iraque", "Noruega"],
+    "J": ["Argentina", "Argélia", "Áustria", "Jordânia"],
+    "K": ["Portugal", "Congo DR", "Uzbequistão", "Colômbia"],
+    "L": ["Inglaterra", "Croácia", "Gana", "Panamá"],
+}
+
+CODIGOS = {
+    "México": "mx",
+    "África do Sul": "za",
+    "Coreia do Sul": "kr",
+    "República Tcheca": "cz",
+    "Canadá": "ca",
+    "Bósnia-Herzegovina": "ba",
+    "Catar": "qa",
+    "Suíça": "ch",
+    "Brasil": "br",
+    "Marrocos": "ma",
+    "Haiti": "ht",
+    "Escócia": "gb-sct",
+    "EUA": "us",
+    "Paraguai": "py",
+    "Austrália": "au",
+    "Turquia": "tr",
+    "Alemanha": "de",
+    "Curaçao": "cw",
+    "Costa do Marfim": "ci",
+    "Equador": "ec",
+    "Países Baixos": "nl",
+    "Japão": "jp",
+    "Suécia": "se",
+    "Tunísia": "tn",
+    "Bélgica": "be",
+    "Egito": "eg",
+    "Irã": "ir",
+    "Nova Zelândia": "nz",
+    "Espanha": "es",
+    "Cabo Verde": "cv",
+    "Arábia Saudita": "sa",
+    "Uruguai": "uy",
+    "França": "fr",
+    "Senegal": "sn",
+    "Iraque": "iq",
+    "Noruega": "no",
+    "Argentina": "ar",
+    "Argélia": "dz",
+    "Áustria": "at",
+    "Jordânia": "jo",
+    "Portugal": "pt",
+    "Congo DR": "cd",
+    "Uzbequistão": "uz",
+    "Colômbia": "co",
+    "Inglaterra": "gb-eng",
+    "Croácia": "hr",
+    "Gana": "gh",
+    "Panamá": "pa",
+}
+
+FLAG_EMOJI = {
+    "México": "🇲🇽",
+    "África do Sul": "🇿🇦",
+    "Coreia do Sul": "🇰🇷",
+    "República Tcheca": "🇨🇿",
+    "Canadá": "🇨🇦",
+    "Bósnia-Herzegovina": "🇧🇦",
+    "Catar": "🇶🇦",
+    "Suíça": "🇨🇭",
+    "Brasil": "🇧🇷",
+    "Marrocos": "🇲🇦",
+    "Haiti": "🇭🇹",
+    "Escócia": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+    "EUA": "🇺🇸",
+    "Paraguai": "🇵🇾",
+    "Austrália": "🇦🇺",
+    "Turquia": "🇹🇷",
+    "Alemanha": "🇩🇪",
+    "Curaçao": "🇨🇼",
+    "Costa do Marfim": "🇨🇮",
+    "Equador": "🇪🇨",
+    "Países Baixos": "🇳🇱",
+    "Japão": "🇯🇵",
+    "Suécia": "🇸🇪",
+    "Tunísia": "🇹🇳",
+    "Bélgica": "🇧🇪",
+    "Egito": "🇪🇬",
+    "Irã": "🇮🇷",
+    "Nova Zelândia": "🇳🇿",
+    "Espanha": "🇪🇸",
+    "Cabo Verde": "🇨🇻",
+    "Arábia Saudita": "🇸🇦",
+    "Uruguai": "🇺🇾",
+    "França": "🇫🇷",
+    "Senegal": "🇸🇳",
+    "Iraque": "🇮🇶",
+    "Noruega": "🇳🇴",
+    "Argentina": "🇦🇷",
+    "Argélia": "🇩🇿",
+    "Áustria": "🇦🇹",
+    "Jordânia": "🇯🇴",
+    "Portugal": "🇵🇹",
+    "Congo DR": "🇨🇩",
+    "Uzbequistão": "🇺🇿",
+    "Colômbia": "🇨🇴",
+    "Inglaterra": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "Croácia": "🇭🇷",
+    "Gana": "🇬🇭",
+    "Panamá": "🇵🇦",
+}
+
+
+def country_emoji(time: str) -> str:
+    return FLAG_EMOJI.get(time, "🏳️")
+
+
+def flag_url(time: str) -> str:
+    codigo = CODIGOS.get(time, "un")
+    return f"https://flagcdn.com/w40/{codigo}.png"
+
+
+def flag_label(time: str | None) -> str:
+    """Retorna label com imagem de bandeira para usar em format_func de selectbox/radio."""
+    if not time:
+        return ""
+    codigo = CODIGOS.get(time, "un")
+    return f"![](https://flagcdn.com/w20/{codigo}.png) {time}"
