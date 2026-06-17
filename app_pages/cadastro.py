@@ -13,34 +13,38 @@ def render():
         unsafe_allow_html=True,
     )
 
+    col_res, _ = st.columns([1, 2])
+    with col_res:
+        if st.button("📊 Ver resultados do bolão", use_container_width=True):
+            st.session_state.pagina = "resultados"
+            st.rerun()
+
     st.divider()
 
-    col_esq, col_form, col_dir = st.columns([1, 2, 1])
-    with col_form:
-        st.subheader("Seus dados")
-        st.caption("Preencha para participar do bolão.")
+    st.subheader("Seus dados")
+    st.caption("Preencha para participar do bolão.")
 
-        with st.form("form_cadastro"):
-            nome = st.text_input("Nome completo", placeholder="Ex: João da Silva")
-            telefone = st.text_input("Telefone (WhatsApp)", placeholder="Ex: (11) 99999-9999")
-            email = st.text_input("E-mail", placeholder="Ex: joao@email.com")
+    with st.form("form_cadastro"):
+        nome = st.text_input("Nome completo", placeholder="Ex: João da Silva")
+        telefone = st.text_input("Telefone (WhatsApp)", placeholder="Ex: (11) 99999-9999")
+        email = st.text_input("E-mail", placeholder="Ex: joao@email.com")
 
-            enviado = st.form_submit_button(
-                "Próximo: fazer palpites →",
-                type="primary",
-                use_container_width=True,
-            )
+        enviado = st.form_submit_button(
+            "Próximo: fazer palpites →",
+            type="primary",
+            use_container_width=True,
+        )
 
-        if enviado:
-            if not nome.strip() or not telefone.strip() or not email.strip():
-                st.error("Preencha todos os campos para continuar.")
-            elif "@" not in email or "." not in email.split("@")[-1]:
-                st.error("Digite um e-mail válido.")
-            else:
-                st.session_state.participante = {
-                    "nome": nome.strip(),
-                    "telefone": telefone.strip(),
-                    "email": email.strip(),
-                }
-                st.session_state.pagina = "palpites"
-                st.rerun()
+    if enviado:
+        if not nome.strip() or not telefone.strip() or not email.strip():
+            st.error("Preencha todos os campos para continuar.")
+        elif "@" not in email or "." not in email.split("@")[-1]:
+            st.error("Digite um e-mail válido.")
+        else:
+            st.session_state.participante = {
+                "nome": nome.strip(),
+                "telefone": telefone.strip(),
+                "email": email.strip(),
+            }
+            st.session_state.pagina = "palpites"
+            st.rerun()

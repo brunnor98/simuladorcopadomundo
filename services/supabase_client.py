@@ -66,3 +66,25 @@ def salvar_chaveamento(participante_id: str, picks: dict) -> None:
     ]
     if linhas:
         sb.table("chaveamento").insert(linhas).execute()
+
+
+# ── Leitura para página de Resultados ─────────────────────────────────────────
+
+def buscar_total_participantes() -> int:
+    sb = get_supabase()
+    res = sb.table("participantes").select("id", count="exact").execute()
+    return res.count if res.count is not None else len(res.data)
+
+
+def buscar_palpites_grupos() -> list:
+    sb = get_supabase()
+    res = sb.table("palpites").select(
+        "grupo, primeiro_lugar, segundo_lugar, terceiro_lugar"
+    ).execute()
+    return res.data or []
+
+
+def buscar_chaveamento_todos() -> list:
+    sb = get_supabase()
+    res = sb.table("chaveamento").select("fase, jogo_num, vencedor").execute()
+    return res.data or []
