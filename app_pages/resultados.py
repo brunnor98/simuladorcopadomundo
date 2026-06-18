@@ -60,21 +60,23 @@ def _secao_grupos(group_stats: dict, total: int):
     for letra, times in GRUPOS.items():
         stats = group_stats.get(letra, {})
         with st.expander(f"Grupo {letra}", expanded=False):
-            tab1, tab2, tab3 = st.tabs(["🥇 1º lugar", "🥈 2º lugar", "🥉 3º lugar"])
-            for tab, pos_key, cor in [
-                (tab1, "primeiro", "#e6a817"),
-                (tab2, "segundo", "#9e9e9e"),
-                (tab3, "terceiro", "#cd7f32"),
+            for pos_key, label, cor in [
+                ("primeiro", "🥇 1º lugar", "#e6a817"),
+                ("segundo", "🥈 2º lugar", "#9e9e9e"),
+                ("terceiro", "🥉 3º lugar", "#cd7f32"),
             ]:
-                with tab:
-                    counter = stats.get(pos_key, Counter())
-                    sorted_times = sorted(
-                        times, key=lambda t: counter.get(t, 0), reverse=True
-                    )
-                    html = "".join(
-                        _barra(t, counter.get(t, 0), total, cor) for t in sorted_times
-                    )
-                    st.markdown(f'<div>{html}</div>', unsafe_allow_html=True)
+                st.markdown(f"**{label}**")
+                counter = stats.get(pos_key, Counter())
+                sorted_times = sorted(
+                    times, key=lambda t: counter.get(t, 0), reverse=True
+                )
+                html = "".join(
+                    _barra(t, counter.get(t, 0), total, cor) for t in sorted_times
+                )
+                st.markdown(
+                    f'<div style="margin-bottom:14px">{html}</div>',
+                    unsafe_allow_html=True,
+                )
 
 
 def _secao_mata_mata(bracket_stats: dict, total: int):
@@ -159,7 +161,7 @@ def render():
     # Agrega palpites do chaveamento
     bracket_stats: dict = {}
     for row in chaveamento:
-        key = (row["fase"], row["jogo_num"])
+        key = (row["fase"], int(row["jogo_num"]))
         if key not in bracket_stats:
             bracket_stats[key] = Counter()
         if row.get("vencedor"):

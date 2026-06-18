@@ -9,8 +9,12 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    * { font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji",
-        "Twemoji Mozilla", sans-serif !important; }
+    /* Emoji font sem !important para não quebrar fontes de ícones do Streamlit */
+    html, body, p, h1, h2, h3, h4, h5, h6, li, td, th, label,
+    input, textarea, button, .stMarkdown {
+        font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji",
+            "Twemoji Mozilla", sans-serif;
+    }
 
     /* ── Responsividade Mobile ───────────────────────────── */
 
