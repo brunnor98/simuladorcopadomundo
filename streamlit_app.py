@@ -44,12 +44,25 @@ st.markdown(
         font-display: swap;
     }
 
+    /* Impede o Safari iOS de inflar/ajustar o tamanho do texto sozinho,
+       o que deixava a tipografia inconsistente entre as telas. */
+    html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    /* Tipografia unificada: lidera com a fonte de bandeiras (só glifos de
+       bandeira via unicode-range), depois "Source Sans" — a MESMA fonte
+       variável que o Streamlit carrega (nome correto, com todos os pesos),
+       e por fim a pilha de fontes do sistema. Isso elimina o fallback
+       errado que renderizava texto fino/lavado no iOS. */
     html, body, p, h1, h2, h3, h4, h5, h6, li, td, th, label,
-    input, textarea, button, .stMarkdown,
+    input, textarea, button, select, .stMarkdown,
     [data-baseweb="select"] *, [data-baseweb="popover"] *,
     [role="option"], [data-baseweb="tag"] * {
-        font-family: "Twemoji Country Flags", "Source Sans Pro", "Segoe UI",
-            "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+        font-family: "Twemoji Country Flags", "Source Sans", "Source Sans Pro",
+            -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+            Arial, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
     }
 
     /* ── Base ────────────────────────────────────────────── */
@@ -57,11 +70,16 @@ st.markdown(
     /* padding-top folga a barra superior fixa do Streamlit (60px) */
     .block-container { max-width: 780px; padding-top: 4.75rem; }
     h1, h2, h3 { color: var(--ink); letter-spacing: -0.01em; }
+    /* Escala tipográfica deliberada (hero > seção > corpo) — o !important
+       vence o tamanho padrão do Streamlit (h3 = 28px), que invertia a
+       hierarquia deixando os títulos de seção maiores que a hero. */
+    h2 { font-size: 1.45rem !important; font-weight: 700 !important; }
+    h3 { font-size: 1.25rem !important; font-weight: 700 !important; }
     hr { margin: 1.1rem 0 !important; border-color: var(--border) !important; }
 
     /* ── Hero ────────────────────────────────────────────── */
     .bolao-hero {
-        background: linear-gradient(135deg, #00B544 0%, #007A2E 100%);
+        background: linear-gradient(135deg, #00A53F 0%, #006E2A 100%);
         border-radius: 20px;
         padding: 1.6rem 1.25rem;
         text-align: center;
@@ -86,13 +104,15 @@ st.markdown(
     }
     .bolao-hero h1 {
         color: #fff !important; margin: .35rem 0 0;
-        font-size: 1.65rem; font-weight: 800; line-height: 1.2;
+        font-size: 1.8rem !important; font-weight: 800 !important; line-height: 1.2;
         position: relative;
+        text-shadow: 0 1px 3px rgba(0,0,0,.22);
     }
     .bolao-hero p {
-        color: rgba(255,255,255,.92) !important;
+        color: rgba(255,255,255,.96) !important;
         margin: .45rem 0 0; font-size: .96rem; line-height: 1.4;
         position: relative;
+        text-shadow: 0 1px 2px rgba(0,0,0,.18);
     }
     .bolao-hero strong { color: var(--gold-light); font-weight: 700; }
 
@@ -151,6 +171,21 @@ st.markdown(
     .stTextInput input:focus, [data-baseweb="select"] > div:focus-within {
         border-color: var(--brand) !important;
         box-shadow: 0 0 0 3px rgba(0,156,59,.15) !important;
+    }
+
+    /* Opções das listas suspensas — alvo de toque confortável (≥44px)
+       e fonte legível; padrão do BaseWeb vinha com 40px / 14px apertado */
+    [data-baseweb="popover"] li,
+    [data-baseweb="menu"] li,
+    ul[role="listbox"] li,
+    li[role="option"] {
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        font-size: 15px !important;
+        padding-top: 6px !important;
+        padding-bottom: 6px !important;
+        line-height: 1.3 !important;
     }
 
     /* ── Métrica ─────────────────────────────────────────── */
@@ -217,8 +252,8 @@ st.markdown(
             margin-bottom: 0.8rem;
         }
         .bolao-hero .emoji { font-size: 2rem; }
-        .bolao-hero h1 { font-size: 1.3rem !important; }
-        .bolao-hero p { font-size: 0.92rem; }
+        .bolao-hero h1 { font-size: 1.5rem !important; }
+        .bolao-hero p { font-size: 0.95rem; }
 
         /* Botões — apenas garante alvo de toque 44px; tamanho de texto
            e padding herdados do desktop (sem quebrar palavra no meio) */
