@@ -10,6 +10,50 @@ def _fmt(time: str | None) -> str:
     return f"{country_emoji(time)} {time}"
 
 
+def _match_thirds(avancam: list, team_to_group: dict, third_slots: list) -> dict:
+    """Aloca os 3ºs colocados às vagas '3' respeitando apenas os grupos
+    permitidos de cada confronto (lista 'ou' do PDF), de modo que todo
+    confronto seja POSSÍVEL pelas regras da chave.
+
+    Obs.: o critério oficial de desempate entre os 8 melhores terceiros
+    (pontos, saldo de gols etc.) não se aplica a este bolão — por decisão
+    do projeto, basta uma alocação válida. O backtracking encontra uma
+    combinação válida de forma estável (mesmos palpites -> mesma chave)."""
+    teams = sorted(
+        [t for t in avancam if t],
+        key=lambda t: (team_to_group.get(t, "Z"), t),
+    )
+    result: dict = {}
+    used = [False] * len(teams)
+
+    def bt(i: int) -> bool:
+        if i == len(third_slots):
+            return True
+        allowed = set(third_slots[i].get("t3_groups", []))
+        for j, t in enumerate(teams):
+            if used[j]:
+                continue
+            if allowed and team_to_group.get(t) not in allowed:
+                continue
+            used[j] = True
+            result[third_slots[i]["id"]] = t
+            if bt(i + 1):
+                return True
+            used[j] = False
+            del result[third_slots[i]["id"]]
+        return False
+
+    if len(teams) == len(third_slots) and bt(0):
+        return result
+
+    # Fallback: distribui em ordem de grupo, sem garantir a restrição
+    result = {}
+    it = iter(teams)
+    for slot in third_slots:
+        result[slot["id"]] = next(it, None)
+    return result
+
+
 def _resolve_r32_teams() -> dict:
     selecoes = st.session_state.get("_selecoes") or {}
     avancam = st.session_state.get("_avancam") or []
@@ -24,13 +68,13 @@ def _resolve_r32_teams() -> dict:
         if s.get("terceiro"):
             team_to_group[s["terceiro"]] = letra
 
-    thirds = sorted(avancam, key=lambda t: team_to_group.get(t, "Z"))
-    third_iter = iter(thirds)
+    third_slots = [m for m in R32 if "3" in (m["t1"], m["t2"])]
+    third_assign = _match_thirds(avancam, team_to_group, third_slots)
 
     teams = {}
     for m in R32:
-        t1 = pos.get(m["t1"]) if m["t1"] != "3" else next(third_iter, None)
-        t2 = pos.get(m["t2"]) if m["t2"] != "3" else next(third_iter, None)
+        t1 = third_assign.get(m["id"]) if m["t1"] == "3" else pos.get(m["t1"])
+        t2 = third_assign.get(m["id"]) if m["t2"] == "3" else pos.get(m["t2"])
         teams[m["id"]] = (t1, t2)
     return teams
 
