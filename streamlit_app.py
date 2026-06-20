@@ -54,7 +54,8 @@ st.markdown(
 
     /* ── Base ────────────────────────────────────────────── */
     .stApp { background: var(--bg); }
-    .block-container { max-width: 780px; padding-top: 1.25rem; }
+    /* padding-top folga a barra superior fixa do Streamlit (60px) */
+    .block-container { max-width: 780px; padding-top: 4.75rem; }
     h1, h2, h3 { color: var(--ink); letter-spacing: -0.01em; }
     hr { margin: 1.1rem 0 !important; border-color: var(--border) !important; }
 
@@ -173,17 +174,35 @@ st.markdown(
         .block-container {
             padding-left: 0.75rem !important;
             padding-right: 0.75rem !important;
-            padding-top: 0.75rem !important;
+            padding-top: 4.5rem !important;  /* folga a barra de 60px */
             max-width: 100% !important;
         }
     }
 
-    /* Smartphones */
+    /* Smartphones
+       Princípio: manter a MESMA tipografia/escala do desktop. Aqui só
+       adaptamos o LAYOUT (empilhar colunas, ritmo vertical mais compacto,
+       alvos de toque) — sem reduzir fontes, o que antes criava uma escala
+       inconsistente e deformava os selects. */
     @media (max-width: 640px) {
-        /* Empilha todas as colunas verticalmente */
+        /* Container: padding lateral uniforme + safe area inferior do iOS */
+        .block-container {
+            padding-left: 0.9rem !important;
+            padding-right: 0.9rem !important;
+            padding-top: 4.5rem !important;  /* folga a barra de 60px */
+            padding-bottom: max(1.5rem, env(safe-area-inset-bottom)) !important;
+            max-width: 100% !important;
+        }
+
+        /* Ritmo vertical compacto e uniforme — mesma régua em toda a tela */
+        [data-testid="stVerticalBlock"] { gap: 0.7rem !important; }
+        [data-testid="stForm"] [data-testid="stVerticalBlock"] { gap: 0.6rem !important; }
+        hr { margin: 0.8rem 0 !important; }
+
+        /* Empilha colunas verticalmente com o mesmo espaçamento */
         div[data-testid="stColumns"] {
             flex-direction: column !important;
-            gap: 0.5rem !important;
+            gap: 0.7rem !important;
         }
         div[data-testid="stColumn"] {
             width: 100% !important;
@@ -191,55 +210,42 @@ st.markdown(
             min-width: 0 !important;
         }
 
-        /* Hero compacto */
-        .bolao-hero { padding: 1.25rem 1rem; border-radius: 16px; }
-        .bolao-hero .emoji { font-size: 2.1rem; }
+        /* Hero levemente compacto */
+        .bolao-hero {
+            padding: 1.2rem 1rem;
+            border-radius: 16px;
+            margin-bottom: 0.8rem;
+        }
+        .bolao-hero .emoji { font-size: 2rem; }
         .bolao-hero h1 { font-size: 1.3rem !important; }
-        .bolao-hero p { font-size: 0.9rem; }
+        .bolao-hero p { font-size: 0.92rem; }
 
-        /* Títulos menores */
-        h1 { font-size: 1.35rem !important; line-height: 1.3 !important; }
-        h2 { font-size: 1.15rem !important; }
-        h3 { font-size: 1rem !important; }
-
-        /* Botões — alvo mínimo de toque 44 px (Apple HIG / Material) */
+        /* Botões — apenas garante alvo de toque 44px; tamanho de texto
+           e padding herdados do desktop (sem quebrar palavra no meio) */
         .stButton > button {
             min-height: 44px !important;
-            font-size: 0.9rem !important;
-            padding: 0.5rem 0.75rem !important;
             white-space: normal !important;
-            word-break: break-word !important;
             line-height: 1.3 !important;
             touch-action: manipulation !important;
         }
 
-        /* Inputs — 16 px (1 rem) previne zoom automático no iOS */
-        .stTextInput input {
-            font-size: 1rem !important;
+        /* Campos de texto e seleção a 16px: previne o zoom automático do
+           iOS e mantém EXATAMENTE o tamanho do desktop. Mira só o campo
+           real — nada de '*', que deformava o componente. */
+        .stTextInput input,
+        [data-baseweb="select"] > div,
+        [data-baseweb="select"] input,
+        [data-baseweb="input"] input {
+            font-size: 16px !important;
+        }
+        .stTextInput input,
+        [data-baseweb="select"] > div {
             min-height: 44px !important;
         }
-        .stTextInput label,
-        .stSelectbox label,
-        .stMultiSelect label { font-size: 0.9rem !important; }
 
-        /* Selectbox e multiselect — 16 px previne zoom iOS */
-        [data-baseweb="select"] * { font-size: 1rem !important; }
-        [data-baseweb="tag"] span { font-size: 0.8rem !important; }
-
-        /* Caixas de alerta/info */
-        [data-testid="stNotification"] p { font-size: 0.875rem !important; }
-
-        /* Caption */
-        [data-testid="stCaptionContainer"] { font-size: 0.8rem !important; }
-
-        /* Padding interno dos containers com borda */
+        /* Padding interno dos cards com borda — confortável, não apertado */
         [data-testid="stVerticalBlockBorderWrapper"] > div {
-            padding: 0.75rem 0.625rem !important;
-        }
-
-        /* Safe area inferior — iOS Home Indicator / gestos de sistema */
-        .block-container {
-            padding-bottom: max(1.5rem, env(safe-area-inset-bottom)) !important;
+            padding: 0.85rem 0.8rem !important;
         }
     }
     </style>
