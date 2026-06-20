@@ -96,13 +96,10 @@ def render():
 
     st.markdown(
         f"""
-        <div style='text-align:center;padding:1rem 0 0.5rem;'>
-            <span style='font-size:3rem'>🏆</span>
-            <h1 style='margin:0;color:#009C3B'>Chaveamento — Copa 2026</h1>
-            <p style='color:#555;margin-top:0.25rem'>
-                Olá, <strong>{participante['nome']}</strong>!
-                Preencha o mata-mata completo até o campeão.
-            </p>
+        <div class="bolao-hero">
+            <div class="emoji">🏆</div>
+            <h1>Chaveamento — Copa 2026</h1>
+            <p>Olá, <strong>{participante['nome']}</strong>! Preencha o mata-mata completo até o campeão.</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -166,7 +163,21 @@ def render():
 
     campeao = st.session_state.get("bk_final")
     if campeao:
-        st.success(f"🏆 Seu campeão: **{_fmt(campeao)}**")
+        code = CODIGOS.get(campeao, "un")
+        st.markdown(
+            f'<div style="background:linear-gradient(135deg,#F2B705 0%,#E08C00 100%);'
+            f'border-radius:16px;padding:1.1rem 1rem;text-align:center;color:#fff;'
+            f'box-shadow:0 8px 22px rgba(224,140,0,.32);margin:0.5rem 0">'
+            f'<div style="font-size:0.78rem;letter-spacing:.08em;text-transform:uppercase;'
+            f'opacity:.92;font-weight:700">🏆 Seu campeão</div>'
+            f'<img src="https://flagcdn.com/w80/{code}.png" '
+            f'style="height:40px;border-radius:4px;margin:0.5rem 0 0.25rem;'
+            f'box-shadow:0 2px 6px rgba(0,0,0,.25)"><br>'
+            f'<span style="font-size:1.4rem;font-weight:800;'
+            f'text-shadow:0 1px 3px rgba(0,0,0,.2)">{campeao}</span>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
 
     # ── Botões ────────────────────────────────────────────────────────────────
     st.divider()

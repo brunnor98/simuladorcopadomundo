@@ -1,7 +1,7 @@
 import streamlit as st
 from collections import Counter
 
-from data.times import GRUPOS, CODIGOS, country_emoji
+from data.times import GRUPOS, CODIGOS
 from services.supabase_client import (
     buscar_total_participantes,
     buscar_palpites_grupos,
@@ -25,12 +25,14 @@ def _pct(n: int, total: int) -> float:
 
 def _barra(time: str, n: int, total: int, cor: str = "#009C3B") -> str:
     pct = _pct(n, total)
-    emoji = country_emoji(time)
+    code = CODIGOS.get(time, "un")
     bar_w = min(pct, 100)
     return (
         f'<div style="display:flex;align-items:center;gap:6px;padding:5px 2px;'
         f'border-bottom:1px solid #f0f4f0">'
-        f'<span style="font-size:1rem;flex-shrink:0">{emoji}</span>'
+        f'<img src="{FLAG_BASE}/{code}.png" alt="" '
+        f'style="width:22px;height:15px;object-fit:cover;border-radius:2px;'
+        f'flex-shrink:0;box-shadow:0 0 0 1px rgba(0,0,0,.05)">'
         f'<span style="flex:1;font-size:0.85rem;overflow:hidden;'
         f'text-overflow:ellipsis;white-space:nowrap;min-width:0">{time}</span>'
         f'<div style="flex:0 0 80px;background:#e8f5e9;border-radius:4px;height:10px">'
@@ -38,8 +40,8 @@ def _barra(time: str, n: int, total: int, cor: str = "#009C3B") -> str:
         f'border-radius:4px;min-width:2px"></div></div>'
         f'<span style="flex:0 0 38px;text-align:right;font-size:0.82rem;'
         f'font-weight:700;color:{cor}">{pct}%</span>'
-        f'<span style="flex:0 0 26px;text-align:right;font-size:0.72rem;'
-        f'color:#bbb">({n})</span>'
+        f'<span style="flex:0 0 28px;text-align:right;font-size:0.78rem;'
+        f'color:#aaa">({n})</span>'
         f'</div>'
     )
 
@@ -51,8 +53,33 @@ def _secao_campeo(bracket_stats: dict, total: int):
         st.caption("Nenhum campeão escolhido ainda.")
         return
     top = final_picks.most_common(10)
-    html = "".join(_barra(t, n, total, "#e6a817") for t, n in top)
-    st.markdown(f'<div>{html}</div>', unsafe_allow_html=True)
+
+    # Destaque do líder em card de pódio
+    lider, n_lider = top[0]
+    code = CODIGOS.get(lider, "un")
+    pct = _pct(n_lider, total)
+    st.markdown(
+        f'<div style="background:linear-gradient(135deg,#FBF1D8 0%,#F7E3A8 100%);'
+        f'border:1px solid #EBD58A;border-radius:16px;padding:1rem 1.1rem;'
+        f'display:flex;align-items:center;gap:14px;margin-bottom:12px">'
+        f'<img src="{FLAG_BASE.replace("w40","w80")}/{code}.png" '
+        f'style="height:42px;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.18)">'
+        f'<div style="flex:1;min-width:0">'
+        f'<div style="font-size:0.72rem;letter-spacing:.06em;text-transform:uppercase;'
+        f'color:#A07A00;font-weight:700">Favorito ao título</div>'
+        f'<div style="font-size:1.25rem;font-weight:800;color:#5C4500;'
+        f'white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{lider}</div>'
+        f'</div>'
+        f'<div style="text-align:right;flex-shrink:0">'
+        f'<div style="font-size:1.5rem;font-weight:800;color:#C8860B;line-height:1">{pct}%</div>'
+        f'<div style="font-size:0.72rem;color:#A07A00">{n_lider} voto(s)</div>'
+        f'</div></div>',
+        unsafe_allow_html=True,
+    )
+
+    if len(top) > 1:
+        html = "".join(_barra(t, n, total, "#e6a817") for t, n in top[1:])
+        st.markdown(f'<div>{html}</div>', unsafe_allow_html=True)
 
 
 def _secao_grupos(group_stats: dict, total: int):
@@ -109,12 +136,10 @@ def _secao_mata_mata(bracket_stats: dict, total: int):
 def render():
     st.markdown(
         """
-        <div style='text-align:center; padding: 1rem 0 0.5rem;'>
-            <span style='font-size:3rem'>📊</span>
-            <h1 style='margin:0; color:#009C3B'>Resultados do Bolão</h1>
-            <p style='color:#555; margin-top:0.25rem'>
-                Consolidado de todos os palpites registrados
-            </p>
+        <div class="bolao-hero">
+            <div class="emoji">📊</div>
+            <h1>Resultados do Bolão</h1>
+            <p>Consolidado de todos os palpites registrados</p>
         </div>
         """,
         unsafe_allow_html=True,

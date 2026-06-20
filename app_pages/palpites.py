@@ -13,7 +13,7 @@ def _lista_times(times: list) -> str:
             f'<img src="{FLAG_BASE}/{code}.png" '
             f'style="width:28px;height:19px;object-fit:cover;border-radius:2px;'
             f'flex-shrink:0;margin-right:8px;">'
-            f'<span style="font-size:0.88rem;line-height:1">{t}</span>'
+            f'<span style="font-size:0.9rem;line-height:1.25">{t}</span>'
             f'</div>'
         )
     return f'<div style="margin:4px 0 10px 0">{linhas}</div>'
@@ -42,12 +42,10 @@ def render():
 
     st.markdown(
         f"""
-        <div style='text-align:center; padding: 1rem 0 0.5rem;'>
-            <span style='font-size:3rem'>⚽</span>
-            <h1 style='margin:0; color:#009C3B'>Bolão da Copa do Mundo 2026</h1>
-            <p style='color:#555; margin-top:0.25rem'>
-                Olá, <strong>{participante['nome']}</strong>! Selecione 1º, 2º e 3º de cada grupo.
-            </p>
+        <div class="bolao-hero">
+            <div class="emoji">⚽</div>
+            <h1>Fase de Grupos</h1>
+            <p>Olá, <strong>{participante['nome']}</strong>! Selecione 1º, 2º e 3º de cada grupo.</p>
         </div>
         """,
         unsafe_allow_html=True,

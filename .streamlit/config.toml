@@ -1,3 +1,7 @@
+[server]
+# Serve a pasta ./static em /app/static/* (usado para hospedar a webfont de bandeiras)
+enableStaticServing = true
+
 [theme]
 base = "light"
 primaryColor = "#009C3B"

@@ -4,10 +4,10 @@ import streamlit as st
 def render():
     st.markdown(
         """
-        <div style='text-align:center; padding: 1rem 0 0.5rem;'>
-            <span style='font-size:3rem'>⚽</span>
-            <h1 style='margin:0; color:#009C3B'>Bolão da Copa do Mundo 2026</h1>
-            <p style='color:#555; margin-top:0.25rem'>Faça seus palpites e concorra a prêmios!</p>
+        <div class="bolao-hero">
+            <div class="emoji">⚽</div>
+            <h1>Bolão da Copa do Mundo 2026</h1>
+            <p>Faça seus palpites e concorra a prêmios!</p>
         </div>
         """,
         unsafe_allow_html=True,
